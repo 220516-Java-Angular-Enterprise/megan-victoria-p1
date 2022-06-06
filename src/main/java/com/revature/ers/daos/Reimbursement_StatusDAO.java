@@ -1,17 +1,15 @@
 package com.revature.ers.daos;
 
-import com.revature.ers.models.Reimbursement_Status;
-
 import java.util.List;
 
-public class Reimbursement_StatusDAO implements CrudDAO<Reimbursement_Status> {
+public class Reimbursement_StatusDAO implements CrudDAO<Reimbursement_StatusDAO> {
     @Override
-    public void save(Reimbursement_Status obj) {
+    public void save(Reimbursement_StatusDAO obj) {
 
     }
 
     @Override
-    public void update(Reimbursement_Status obj) {
+    public void update(Reimbursement_StatusDAO obj) {
 
     }
 
@@ -21,12 +19,12 @@ public class Reimbursement_StatusDAO implements CrudDAO<Reimbursement_Status> {
     }
 
     @Override
-    public Reimbursement_Status getById(String id) {
+    public Reimbursement_StatusDAO getById(String id) {
         return null;
     }
 
     @Override
-    public List<Reimbursement_Status> getAll() {
+    public List<Reimbursement_StatusDAO> getAll() {
         return null;
     }
 }

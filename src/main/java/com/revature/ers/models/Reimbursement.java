@@ -19,6 +19,20 @@ public class Reimbursement {
     public Reimbursement(){
     }
 
+    public Reimbursement(String id, Number amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type_id) {
+        this.id = id;
+        this.amount = amount;
+        this.submitted = submitted;
+        this.resolved = resolved;
+        this.description = description;
+        this.receipt = receipt;
+        this.payment_id = payment_id;
+        this.author_id = author_id;
+        this.resolver_id = resolver_id;
+        this.status_id = status_id;
+        this.type_id = type_id;
+    }
+
     public String getId() {
         return id;
     }

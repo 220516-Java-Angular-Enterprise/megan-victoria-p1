@@ -4,6 +4,11 @@ public class Reimbursement_Status {
     private String status_id;
     private String status;
 
+    public Reimbursement_Status(String status_id, String status) {
+        this.status_id = status_id;
+        this.status = status;
+    }
+
     public Reimbursement_Status(){
     }
 
