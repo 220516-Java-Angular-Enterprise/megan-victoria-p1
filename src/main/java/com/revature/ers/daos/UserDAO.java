@@ -51,11 +51,45 @@ public class UserDAO implements CrudDAO<User> {
 
     @Override
     public User getById(String id) {
-        return null;
+        User user = new User();
+
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users where id = ?");
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                user = new User(rs.getString("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"), rs.getString("given_name"), rs.getString("surname"), rs.getBoolean("is_active"), rs.getString("role_id"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred when tyring to get data from to the database.");
+        }
+
+        return user;
     }
 
     @Override
     public List<User> getAll() {
-        return null;
+        List<User> users = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString("id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setGiven_name(rs.getString("given_name"));
+                user.setSurname(rs.getString("surname"));
+                user.setIs_active(rs.getBoolean("is_active"));
+                user.setRole_id(rs.getString("role_id"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred when tyring to get data from to the database.");
+        }
+        return users;
     }
 }
