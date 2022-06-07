@@ -4,7 +4,7 @@ public class NewUserRequest {
     private String username;
     private String password;
 
-    private final String role="DEFAULT";
+    private final String role_id = "9";
 
     public NewUserRequest(){
         super();
@@ -31,11 +31,12 @@ public class NewUserRequest {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public String getRole_id() {
+        return role_id;
     }
     public User extractUser(){
-        return new User(username,password,role);
+
+        return new User(username,password,role_id);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class NewUserRequest {
         return "NewUserRequest{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
+                ", role_id='" + role_id + '\'' +
                 '}';
     }
 }
