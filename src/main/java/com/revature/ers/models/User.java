@@ -9,6 +9,7 @@ public class User {
     private String surname;
     private boolean is_active;
     private String role_id;
+    
 
     public User() {}
 
@@ -21,6 +22,12 @@ public class User {
         this.given_name = given_name;
         this.surname = surname;
         this.is_active = is_active;
+        this.role_id = role_id;
+    }
+
+    public User(String username, String password, String role_id) {
+        this.username = username;
+        this.password = password;
         this.role_id = role_id;
     }
 
