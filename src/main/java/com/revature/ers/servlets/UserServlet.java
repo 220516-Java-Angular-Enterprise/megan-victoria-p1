@@ -1,5 +1,6 @@
 package com.revature.ers.servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.ers.dtos.requests.NewUserRequest;
 import com.revature.ers.models.User;
 import com.revature.ers.services.UserService;
@@ -7,6 +8,10 @@ import com.revature.ers.utils.annotations.Inject;
 import com.revature.ers.utils.custom_exceptions.InvalidRequestException;
 import com.revature.ers.utils.custom_exceptions.ResourceConflictException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class UserServlet extends HttpServlet {
@@ -20,7 +25,7 @@ public class UserServlet extends HttpServlet {
         this.userService= userService;
     }
     @Override
-    protected void doPost(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException{
         try {
             NewUserRequest request = mapper.readValue(req.getInputStream(), NewUserRequest.class);
             User createdUser = userService.register(request);
