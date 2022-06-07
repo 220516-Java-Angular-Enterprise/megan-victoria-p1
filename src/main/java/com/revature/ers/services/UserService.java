@@ -23,7 +23,7 @@ public class UserService {
         User user=new User();
         List<User> users=userDAO.getAll();
 
-        for(User u:users){(
+        for(User u:users){
             if(u.getUsername().equals(username)){
                 user.setId(u.getId());
                 user.setUsername(u.getUsername());
