@@ -4,9 +4,13 @@ import com.revature.ers.daos.UserDAO;
 import com.revature.ers.dtos.requests.NewUserRequest;
 import com.revature.ers.models.User;
 import com.revature.ers.utils.annotations.Inject;
+import com.revature.ers.utils.custom_exceptions.InvalidRequestException;
+import com.revature.ers.utils.custom_exceptions.InvalidUserException;
+import com.revature.ers.utils.custom_exceptions.ResourceConflictException;
 
 import java.util.List;
-
+import java.util.UUID;
+// this is so I can push
 public class UserService {
     @Inject
     private final UserDAO userDAO;
@@ -34,13 +38,39 @@ public class UserService {
         }
   return isValidCredentials(user);
     }
-    public User register(NewUserRequest){
-        User user =request.extractUser();
+    public User register(NewUserRequest request){
+        User user = request.extractUser();
 
         if(isNotDuplicateUsername(user.getUsername())){
             if(isValidUsername(user.getUsername())){
                 if(isValidPassword(user.getPassword())){
-            }
-        }
+                    user.setId(UUID.randomUUID().toString());
+                    userDAO.save(user);
+                }else throw new InvalidRequestException("Invalid password. Minimum eight characters,at least one letter, one number and one special character. ");
+            }else throw new InvalidRequestException("Invalid username. Username needs to be 8-20 characters long ");
+        }else throw new ResourceConflictException("Username is already taken");
+        return user;
+    }
+
+    public User getUserById(String id){
+        return userDAO.getById(id);
+    }
+    private boolean isValidUsername(String username){
+        return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
+    }
+    private boolean isNotDuplicateUsername(String username){
+        return !userDAO.getAllUsernames().contains(username);
+    }
+    private boolean isValidPassword(String password){
+        return password.matches("^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[@$!%*#?&])[A-Za-z\\\\d@$!%*#?&]{8,}$");
+    }
+
+    private User isValidCredentials(User user){
+        if(user.getUsername() == null && user.getPassword() ==null)
+            throw new InvalidUserException("Incorrect username and password.");
+        else if (user.getUsername() == null) throw new InvalidUserException("Incorrect username.");
+        else if (user.getPassword() == null) throw new InvalidUserException("Incorrect password.");
+
+        return user;
     }
 }
