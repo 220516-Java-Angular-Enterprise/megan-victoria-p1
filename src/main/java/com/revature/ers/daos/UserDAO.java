@@ -4,7 +4,6 @@ import com.revature.ers.models.User;
 import com.revature.ers.utils.custom_exceptions.InvalidSQLException;
 import com.revature.ers.utils.database.DatabaseConnection;
 
-import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -108,5 +107,21 @@ public class UserDAO implements CrudDAO<User> {
         }
 
         return usernames;
+    }
+    public User getUserByUsernameAndPassword(String username, String password){
+        User user = new User();
+        try{
+            PreparedStatement ps=con.prepareStatement("SELECT* FROM users WHERE username = ? and password =?");
+            ps.setString(1,username);
+            ps.setString(2,password);
+
+            ResultSet rs = ps.executeQuery();
+
+if(rs.next()) {
+    user = new User(rs.getString("id"), rs.getString("username"), rs.getString("password"), rs.getString("role_id"));
+}
+        }catch (SQLException e){
+            throw new InvalidSQLException("An error occurred trying to get username and password from the database.");
+        }return user;
     }
 }
