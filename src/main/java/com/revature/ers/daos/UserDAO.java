@@ -126,4 +126,24 @@ public class UserDAO implements CrudDAO<User> {
             throw new InvalidSQLException("An error occurred trying to get username and password from the database.");
         }return user;
     }
+
+    public List<User> getUsersByUsername(String name) {
+        List<User> users = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = con.prepareStatement(("SELECT * FROM users WHERE username LIKE ?"));
+            ps.setString(1, name + '%');
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                users.add(new User(rs.getString("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"), rs.getString("given_name"), rs.getString("surname"), rs.getBoolean("is_active"), rs.getString("role_id")));
+            }
+
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get data from to the database.");
+        }
+        return users;
+    }
 }
+
+

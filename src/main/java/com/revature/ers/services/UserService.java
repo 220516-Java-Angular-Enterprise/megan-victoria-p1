@@ -10,6 +10,7 @@ import com.revature.ers.utils.custom_exceptions.InvalidRequestException;
 import com.revature.ers.utils.custom_exceptions.InvalidUserException;
 import com.revature.ers.utils.custom_exceptions.ResourceConflictException;
 
+import java.util.List;
 import java.util.UUID;
 // this is so I can push
 public class UserService {
@@ -20,6 +21,7 @@ public class UserService {
     public UserService(UserDAO userDAO){
         this.userDAO=userDAO;
     }
+
     public User login(LoginRequest request){
         User user=new User();
 
@@ -46,6 +48,15 @@ public class UserService {
     public User getUserById(String id){
         return userDAO.getById(id);
     }
+
+    public List<User> getAllUsers() {
+        return userDAO.getAll();
+    }
+
+    public List<User> getUserByUsername(String name) {
+        return userDAO.getUsersByUsername(name);
+    }
+
     private boolean isValidUsername(String username){
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }
