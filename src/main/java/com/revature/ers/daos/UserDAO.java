@@ -16,8 +16,10 @@ public class UserDAO implements CrudDAO<User> {
 
     @Override
     public void save(User obj) {
+//        encryption for password is set in the ps for password. 'bf' makes max pswd 72 and has an output length of 60)
+//        gen_salt generates a new salt value
         try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, email, password, given_name, surname, is_active, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, email, password, given_name, surname, is_active, role_id) VALUES (?, ?, ?, crypt(?, gen_salt('bf)), ?, ?, ?, ?)");
             ps.setString(1, obj.getId());
             ps.setString(2, obj.getUsername());
             ps.setString(3, obj.getEmail());
@@ -109,17 +111,17 @@ public class UserDAO implements CrudDAO<User> {
         return usernames;
     }
     public User getUserByUsernameAndPassword(String username, String password){
-        User user = new User();
+        User user = null;
         try{
-            PreparedStatement ps=con.prepareStatement("SELECT* FROM users WHERE username = ? and password =?");
+            PreparedStatement ps=con.prepareStatement("SELECT* FROM users WHERE username = ? AND password = crypt(?, password)");
             ps.setString(1,username);
             ps.setString(2,password);
 
             ResultSet rs = ps.executeQuery();
 
-if(rs.next()) {
-    user = new User(rs.getString("id"), rs.getString("username"), rs.getString("password"), rs.getString("role_id"));
-}
+        if(rs.next()) {
+            user = new User(rs.getString("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"), rs.getString("given_name"), rs.getString("surname"), rs.getBoolean("is_active"), rs.getString("role_id"));
+        }
         }catch (SQLException e){
             throw new InvalidSQLException("An error occurred trying to get username and password from the database.");
         }return user;
