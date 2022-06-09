@@ -1,14 +1,15 @@
 package com.revature.ers.services;
 
 import com.revature.ers.daos.UserDAO;
+import com.revature.ers.dtos.requests.LoginRequest;
 import com.revature.ers.dtos.requests.NewUserRequest;
 import com.revature.ers.models.User;
 import com.revature.ers.utils.annotations.Inject;
+import com.revature.ers.utils.custom_exceptions.AuthenticationException;
 import com.revature.ers.utils.custom_exceptions.InvalidRequestException;
 import com.revature.ers.utils.custom_exceptions.InvalidUserException;
 import com.revature.ers.utils.custom_exceptions.ResourceConflictException;
 
-import java.util.List;
 import java.util.UUID;
 // this is so I can push
 public class UserService {
@@ -19,24 +20,14 @@ public class UserService {
     public UserService(UserDAO userDAO){
         this.userDAO=userDAO;
     }
-    public User login(String username,String password){
+    public User login(LoginRequest request){
         User user=new User();
-        List<User> users=userDAO.getAll();
 
-        for(User u:users){
-            if(u.getUsername().equals(username)){
-                user.setId(u.getId());
-                user.setUsername(u.getUsername());
-                if(u.getPassword().equals(password)){
-                    user.setPassword(u.getPassword());
-                    break;
-                }
-            }
-            if(u.getPassword().equals(password)){
-                user.setPassword(u.getPassword());
-            }
-        }
-  return isValidCredentials(user);
+        if(!isValidUsername(request.getUsername()) || !isValidPassword(request.getPassword())) throw new InvalidRequestException("Invalid username or password");
+        user =userDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
+        if(user==null) throw new AuthenticationException("Invalid credentials provided.");
+
+  return user;
     }
     public User register(NewUserRequest request){
         User user = request.extractUser();
