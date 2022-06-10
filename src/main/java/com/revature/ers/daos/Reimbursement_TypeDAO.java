@@ -1,7 +1,7 @@
 package com.revature.ers.daos;
 
 import com.revature.ers.models.Reimbursement_Type;
-import com.revature.ers.utils.database.DatabaseConnection;
+import com.revature.ers.utils.database.ConnectionFactory;
 import com.revature.ers.utils.custom_exceptions.InvalidSQLException;
 
 import java.io.*;

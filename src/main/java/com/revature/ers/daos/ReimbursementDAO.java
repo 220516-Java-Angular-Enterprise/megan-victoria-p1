@@ -2,7 +2,7 @@ package com.revature.ers.daos;
 
 import com.revature.ers.models.Reimbursement;
 import com.revature.ers.utils.custom_exceptions.InvalidSQLException;
-import com.revature.ers.utils.database.DatabaseConnection;
+import com.revature.ers.utils.database.ConnectionFactory;
 import java.lang.Number;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -13,11 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReimbursementDAO implements CrudDAO<Reimbursement> {
-    Connection con = DatabaseConnection.getCon();
 
     @Override
     public void save(Reimbursement obj) {
-        try {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO reimbursements (id,amount,submitted,resolved,description,receipt,payment_id,author_id,resolver_id,status_id,type_id) VALUES(?,?,?,?,?,?,?,?,?,?,?) ");
             ps.setString(1, obj.getId());
             ps.setBigDecimal(2, (BigDecimal) obj.getAmount());
@@ -49,7 +48,7 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
     @Override
     public Reimbursement getById(String id) {
         Reimbursement reimbursement = new Reimbursement();
-        try {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements WHERE id = ?");
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
@@ -72,7 +71,7 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
 
     public List<Reimbursement> getReimbursementByStatusId(String status_id) {
         List<Reimbursement> reimbursement = new ArrayList<>();
-        try {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements WHERE status_id=(?) ");
             ps.setString(1, status_id);
             ResultSet rs = ps.executeQuery();
@@ -89,7 +88,7 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
     }
         public List<Reimbursement> getReimbursementByTypeId(String type_id) {
             List<Reimbursement> reimbursement = new ArrayList<>();
-            try {
+            try(Connection con = ConnectionFactory.getInstance().getConnection()) {
                 PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements WHERE type_id=(?) ");
                 ps.setString(1, type_id);
                 ResultSet rs = ps.executeQuery();

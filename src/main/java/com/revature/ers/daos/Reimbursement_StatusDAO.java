@@ -2,7 +2,7 @@ package com.revature.ers.daos;
 
 import com.revature.ers.models.Reimbursement_Status;
 import com.revature.ers.utils.custom_exceptions.InvalidSQLException;
-import com.revature.ers.utils.database.DatabaseConnection;
+import com.revature.ers.utils.database.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +12,6 @@ import java.util.List;
 
 public class Reimbursement_StatusDAO implements CrudDAO<Reimbursement_Status> {
 
-Connection con = DatabaseConnection.getCon();
     @Override
     public void save(Reimbursement_Status obj) {
 
@@ -31,7 +30,7 @@ Connection con = DatabaseConnection.getCon();
     @Override
     public Reimbursement_Status getById(String status_id) {
         Reimbursement_Status reimbursement_status = new Reimbursement_Status();
-        try{
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps=con.prepareStatement("SELECT from reimbursement_status WHERE status_id =?");
             ps.setString(1,status_id);
             ResultSet rs= ps.executeQuery();

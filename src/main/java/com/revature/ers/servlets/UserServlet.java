@@ -14,7 +14,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class UserServlet extends HttpServlet {
@@ -30,7 +32,7 @@ public class UserServlet extends HttpServlet {
         this.tokenService = tokenService;
     }
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException{
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         super.doPost(req, resp);
         try {
             NewUserRequest request = mapper.readValue(req.getInputStream(), NewUserRequest.class);
@@ -93,5 +95,40 @@ public class UserServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.getWriter().write(mapper.writeValueAsString(users));
     }
+
+//    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+//        String newPassword = HttpServletRequest.getParameter("newPassword");
+//        String reNewPassword = HttpServletRequest.getParameter("reNewPassword");
+//        String id = HttpServletRequest.getRemoteUser();
+//
+//        try {
+//
+//            Principal user = requester.getUsername();
+//
+//        if (requester == null) {
+//            resp.setStatus(401); //unauthorized
+//            return;
+//        }
+//
+//        if (!requester.getRole_id().equals("8")) {
+//            resp.setStatus(403); // FORBIDDEN
+//            return;
+//        }
+////          Will read input
+//            BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+//            String newPassword = br.readLine();
+//
+//            User
+//
+//        }catch (InvalidRequestException e){
+//            resp.setStatus(404);//Bad Requests
+//        }catch (ResourceConflictException e){
+//            resp.setStatus(409);//Resource Conflict
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            resp.setStatus(500);
+//        }
+//    }
 }
 
