@@ -5,10 +5,7 @@ import com.revature.ers.dtos.requests.LoginRequest;
 import com.revature.ers.dtos.requests.NewUserRequest;
 import com.revature.ers.models.User;
 import com.revature.ers.utils.annotations.Inject;
-import com.revature.ers.utils.custom_exceptions.AuthenticationException;
-import com.revature.ers.utils.custom_exceptions.InvalidRequestException;
-import com.revature.ers.utils.custom_exceptions.InvalidUserException;
-import com.revature.ers.utils.custom_exceptions.ResourceConflictException;
+import com.revature.ers.utils.custom_exceptions.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,34 +15,37 @@ public class UserService {
     private final UserDAO userDAO;
 
     @Inject
-    public UserService(UserDAO userDAO){
-        this.userDAO=userDAO;
+    public UserService(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
-    public User login(LoginRequest request){
-        User user=new User();
+    public User login(LoginRequest request) {
+        User user = new User();
 
-        if(!isValidUsername(request.getUsername()) || !isValidPassword(request.getPassword())) throw new InvalidRequestException("Invalid username or password");
-        user =userDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
-        if(user==null) throw new AuthenticationException("Invalid credentials provided.");
+        if (!isValidUsername(request.getUsername()) || !isValidPassword(request.getPassword()))
+            throw new InvalidRequestException("Invalid username or password");
+        user = userDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
+        if (user == null) throw new AuthenticationException("Invalid credentials provided.");
 
-  return user;
-    }
-    public User register(NewUserRequest request){
-        User user = request.extractUser();
-
-        if(isNotDuplicateUsername(user.getUsername())){
-            if(isValidUsername(user.getUsername())){
-                if(isValidPassword(user.getPassword())){
-                    user.setId(UUID.randomUUID().toString());
-                    userDAO.save(user);
-                }else throw new InvalidRequestException("Invalid password. Minimum eight characters,at least one letter, one number and one special character. ");
-            }else throw new InvalidRequestException("Invalid username. Username needs to be 8-20 characters long ");
-        }else throw new ResourceConflictException("Username is already taken");
         return user;
     }
 
-    public User getUserById(String id){
+    public User register(NewUserRequest request) {
+        User user = request.extractUser();
+
+        if (isNotDuplicateUsername(user.getUsername())) {
+            if (isValidUsername(user.getUsername())) {
+                if (isValidPassword(user.getPassword())) {
+                    user.setId(UUID.randomUUID().toString());
+                    userDAO.save(user);
+                } else
+                    throw new InvalidRequestException("Invalid password. Minimum eight characters,at least one letter, one number and one special character. ");
+            } else throw new InvalidRequestException("Invalid username. Username needs to be 8-20 characters long ");
+        } else throw new ResourceConflictException("Username is already taken");
+        return user;
+    }
+
+    public User getUserById(String id) {
         return userDAO.getById(id);
     }
 
@@ -57,22 +57,34 @@ public class UserService {
         return userDAO.getUsersByUsername(name);
     }
 
-    private boolean isValidUsername(String username){
+    private boolean isValidUsername(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }
-    private boolean isNotDuplicateUsername(String username){
+
+    private boolean isNotDuplicateUsername(String username) {
         return !userDAO.getAllUsernames().contains(username);
     }
-    private boolean isValidPassword(String password){
+
+    private boolean isValidPassword(String password) {
         return password.matches("^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[@$!%*#?&])[A-Za-z\\\\d@$!%*#?&]{8,}$");
     }
 
-    private User isValidCredentials(User user){
-        if(user.getUsername() == null && user.getPassword() ==null)
+    private User isValidCredentials(User user) {
+        if (user.getUsername() == null && user.getPassword() == null)
             throw new InvalidUserException("Incorrect username and password.");
         else if (user.getUsername() == null) throw new InvalidUserException("Incorrect username.");
         else if (user.getPassword() == null) throw new InvalidUserException("Incorrect password.");
 
         return user;
+    }
+
+    public boolean updatePassword(String password, String id) {
+        try {
+            UserDAO.updateUserPassword(password, id);
+            return true;
+        } catch (InvalidSQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 }
