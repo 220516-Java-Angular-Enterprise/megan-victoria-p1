@@ -137,4 +137,7 @@ public class Reimbursement {
                 ", type_id='" + type_id + '\'' +
                 '}';
     }
+
+    public void update(Reimbursement reimbursement) {
+    }
 }
