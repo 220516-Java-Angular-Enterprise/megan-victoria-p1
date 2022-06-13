@@ -78,8 +78,17 @@ public class UserServlet extends HttpServlet {
     }
 
     @Override
+//    will get info (request sorts/info users would need)
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+        NewUserRequest userRequest = mapper.readValue(req.getInputStream(), NewUserRequest.class);
+
+//        this will allow us to get the actual flow of the user
+        String[] uris = req.getRequestURI().split("/");
+//        this will allow admin to get by what ever search param
+//        look at 1st letter? search by: User, Role, Status
+        String query = req.getQueryString();
+        resp.setContentType("application/json");
 
         if (requester == null) {
             resp.setStatus(401); //unauthorized
@@ -91,12 +100,33 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
-        List<User> users = userService.getAllUsers();
-        resp.setContentType("application/json");
-        resp.getWriter().write(mapper.writeValueAsString(users));
+        if (uris.length == 4 && uris[3].equals("users")) {
+            List<User> users = userService.getAllUsers();
+            resp.getWriter().write(mapper.writeValueAsString(users));
+        }
+
+//        wont work b/c contextLoadListener maps to auth and users/* need to figure out
+        if (uris.length == 4 && uris[3].equals("username")) {
+            List<User> users = userService.getUserByUsername(userRequest.getUsername());
+            resp.getWriter().write(mapper.writeValueAsString(users));
+        }
+
+        if (uris.length == 5 && uris[4].equals("role")) {
+            List<User> users = userService.getUserByRole(userRequest.getRole_id());
+            resp.getWriter().write(mapper.writeValueAsString(users));
+        }
+
     }
 
 //    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+//    need to get the user info
+//    need to get the updated info and call user service function to update the DAO
+//    maybe need new dtos request for change password/change status
+
+//    changing status same as pswd
+
+
 //        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 //        String newPassword = HttpServletRequest.getParameter("newPassword");
 //        String reNewPassword = HttpServletRequest.getParameter("reNewPassword");
@@ -130,5 +160,42 @@ public class UserServlet extends HttpServlet {
 //            resp.setStatus(500);
 //        }
 //    }
+
+        protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//            String id = retrieve
+            Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+            NewUserRequest userRequest = mapper.readValue(req.getInputStream(), NewUserRequest.class);
+            String[] uris = req.getRequestURI().split("/");
+            String query = req.getQueryString();
+            resp.setContentType("application/json");
+
+            if (requester == null) {
+                resp.setStatus(401); //unauthorized
+                return;
+            }
+
+            if (!requester.getRole_id().equals("8")) {
+                resp.setStatus(403); // FORBIDDEN
+                return;
+            }
+
+//            to update password
+//            if()
+        }
+
+        private static String getUserId(HttpServletRequest req) {
+//        String pathInfo = req.getPathInfo();
+//        if (pathInfo.startsWith("/")) {
+//            pathInfo = pathInfo.substring(1);
+//        }
+//        return String.pathInfo;
+            return null;
+        }
+
+        private void updatePassword() {
+
+
+        }
+
 }
 

@@ -147,6 +147,43 @@ public class UserDAO implements CrudDAO<User> {
         return users;
     }
 
+    public List<User> getUsersByRole(String role) {
+        List<User> users = new ArrayList<>();
+
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE role LIKE ?");
+            ps.setString(1, role + '%');
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                users.add(new User(rs.getString("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"), rs.getString("given_name"), rs.getString("surname"), rs.getBoolean("is_active"), rs.getString("role_id")));
+            }
+
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get data from to the database.");
+        }
+        return users;
+    }
+
+    public List<User> getUserActive(String activity) {
+        List<User> users = new ArrayList<>();
+
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE ");
+            ps.setString(1, activity + '%');
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                users.add(new User(rs.getString("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"), rs.getString("given_name"), rs.getString("surname"), rs.getBoolean("is_active"), rs.getString("role_id")));
+            }
+
+        }catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get data from to the database.");
+        }
+
+        return users;
+    }
+
 //    made me make it static bc of user service. No if we run into probs, check here...
     public static void updateUserPassword(String password, String id) {
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {

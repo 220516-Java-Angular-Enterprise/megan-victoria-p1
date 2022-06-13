@@ -57,6 +57,11 @@ public class UserService {
         return userDAO.getUsersByUsername(name);
     }
 
+    public List<User> getUserByRole(String role) {
+        return userDAO.getUsersByRole(role);
+    }
+
+
     private boolean isValidUsername(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }
