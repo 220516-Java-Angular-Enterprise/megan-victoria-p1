@@ -25,6 +25,7 @@ public class UserService {
             throw new InvalidRequestException("Invalid username or password");
         user = userDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
         if (user == null) throw new AuthenticationException("Invalid credentials provided.");
+        if (!user.isIs_active()) throw new AuthenticationException("Invalid credentials provided.");
 
         return user;
     }
@@ -58,6 +59,10 @@ public class UserService {
 
     public List<User> getUserByRole(String role) {
         return userDAO.getUsersByRole(role);
+    }
+
+    public List<User> getUserStatus (String status) {
+        return userDAO.getUserActive(status);
     }
 
 // VALIDATIONS
