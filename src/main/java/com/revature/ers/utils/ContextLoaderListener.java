@@ -15,7 +15,7 @@ import javax.servlet.ServletContextListener;
 public class ContextLoaderListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("\nInitializing Yolp web application");
+        System.out.println("\nInitializing ERS web application");
 
         /* ObjectMapper provides functionality for reading and writing JSON, either to and from basic POJOs (Plain Old Java Objects) */
         ObjectMapper mapper = new ObjectMapper();
@@ -32,6 +32,6 @@ public class ContextLoaderListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("\nShutting down Yolp web application");
+        System.out.println("\nShutting down ERS web application");
     }
 }
