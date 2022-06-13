@@ -33,12 +33,23 @@ public class Reimbursement {
         this.type_id = type_id;
     }
 
+<<<<<<< HEAD
     public Reimbursement(String author_id, String status_id, String type_id, Number amount, String description) {
         this.author_id=author_id;
         this.status_id=status_id;
         this.type_id=type_id;
         this.amount=amount;
         this.description=description;
+=======
+    public Reimbursement(String id, String author_id, String status_id, String type_id, Timestamp submitted, Number amount, String description) {
+        this.id = id;
+        this.amount = amount;
+        this.submitted = submitted;
+        this.description = description;
+        this.author_id = author_id;
+        this.status_id = status_id;
+        this.type_id = type_id;
+>>>>>>> 1e14593dfdb945200b4aba72d3a00e9bc6e7d6bc
     }
 
     public String getId() {

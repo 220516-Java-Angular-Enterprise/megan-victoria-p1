@@ -29,12 +29,11 @@ hs_err_pid*
 *.iml
 
 *.DS_Store
-<<<<<<< HEAD
-target
-pom.xml
-=======
+
+
+
 
 *target/
 
 *.properties
->>>>>>> 1697c6702059a392d6342cc124ce68efe6bffb21
+

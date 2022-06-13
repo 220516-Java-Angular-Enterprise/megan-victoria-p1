@@ -14,6 +14,46 @@ import java.util.List;
 
 public class UserDAO implements CrudDAO<User> {
 
+    //    ADMIN FUNCTIONS:
+
+//    Update user password
+    public void updateUserPassword(String password, String username) {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET password = crypt(?, password) WHERE username = ?");
+            ps.setString(1, password);
+            ps.setString(2, username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to update data from to the database.");
+        }
+    }
+
+    //    Change User is_Active status
+    public void updateIs_active(boolean is_active, String username) {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET is_active = ? WHERE username = ?");
+            ps.setBoolean(1, is_active);
+            ps.setString(2, username);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to update data from to the database.");
+        }
+    }
+
+//    Update user role
+    public void updateUserRole(String role_id, String username) {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET role_id = ? WHERE username = ?");
+            ps.setString(1, role_id);
+            ps.setString(2, username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to update data from to the database.");
+        }
+    }
+
+//  Add new user to system
     @Override
     public void save(User obj) {
 //        encryption for password is set in the ps for password. 'bf' makes max pswd 72 and has an output length of 60)
@@ -34,11 +74,7 @@ public class UserDAO implements CrudDAO<User> {
         }
     }
 
-    @Override
-    public void update(User obj) {
-
-    }
-
+//    Delete user from system
     @Override
     public void delete(String id) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
@@ -49,6 +85,13 @@ public class UserDAO implements CrudDAO<User> {
             throw new InvalidSQLException("An error occurred when tyring to update data from to the database.");
         }
     }
+
+
+    @Override
+    public void update(User obj) {
+
+    }
+
 
     @Override
     public User getById(String id) {
@@ -185,17 +228,7 @@ public class UserDAO implements CrudDAO<User> {
     }
 
 //    made me make it static bc of user service. No if we run into probs, check here...
-    public static void updateUserPassword(String password, String id) {
-        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("UPDATE users SET password = crypt(?, password) WHERE id = ?");
-            ps.setString(1, password);
-            ps.setString(2, id);
-            ps.executeUpdate();
 
-        } catch (SQLException e) {
-            throw new InvalidSQLException("An error occurred when tyring to update data from to the database.");
-        }
-    }
 }
 
 
