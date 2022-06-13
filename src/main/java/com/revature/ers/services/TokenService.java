@@ -8,7 +8,8 @@ public class TokenService {
     @Inject
     private JwtConfig jwtConfig;
 
-    public TokenService() {};
+    public TokenService(){
+    };
 
     @Inject
     public TokenService(JwtConfig jwtConfig) {

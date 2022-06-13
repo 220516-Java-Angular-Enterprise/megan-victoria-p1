@@ -1,5 +1,7 @@
 package com.revature.ers.dtos.requests;
 
+import com.revature.ers.models.Reimbursement;
+
 import java.sql.Timestamp;
 
 public class NewReimbursementRequest {
@@ -13,6 +15,7 @@ public class NewReimbursementRequest {
     public NewReimbursementRequest(){
 
     }
+
 
     public NewReimbursementRequest(String author_id, String status_id, String type_id, Timestamp submitted, Number amount, String description) {
         this.author_id = author_id;
@@ -70,7 +73,10 @@ public class NewReimbursementRequest {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    public Reimbursement extractReimbursement()
+    {
+        return new Reimbursement(author_id,status_id,type_id,amount,description);
+    }
     @Override
     public String toString() {
         return "NewReimbursementRequest{" +

@@ -1,11 +1,16 @@
 package com.revature.ers.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.ers.dtos.requests.NewReimbursementRequest;
 import com.revature.ers.services.ReimbursementService;
 import com.revature.ers.services.TokenService;
 import com.revature.ers.utils.annotations.Inject;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class ReimbursementServlet extends HttpServlet {
     @Inject
@@ -20,19 +25,18 @@ public class ReimbursementServlet extends HttpServlet {
         this.mapper = mapper;
         this.reimbursementService = reimbursementService;
         this.tokenService=tokenService;
-    }}
+    }
 
-   /* @Override
+   @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doPost(req, resp);
         try{
-            NewReimbursementRequest newReimbursementRequest= mapper.readValue(req.getInputStream(),NewReimbursementRequest.class);
-            String[] uris= req.getRequestURI().split("/");
+            NewReimbursementRequest request= mapper.readValue(req.getInputStream(), NewReimbursementRequest.class);
 
-            if(uris.length==4 && uris[3].equals("reimbursement")){
-                Principal requester=tokenService.extractRequesterDetails(req.getHeader("Reimbursement"));
-            }
+            }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(500);
 
         }
     }
-}*/
+}

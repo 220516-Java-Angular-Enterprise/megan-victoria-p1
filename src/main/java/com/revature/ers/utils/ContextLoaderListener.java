@@ -28,6 +28,7 @@ public class ContextLoaderListener implements ServletContextListener {
         AuthServlet authServlet = new AuthServlet(mapper, new UserService(new UserDAO()), new TokenService(new JwtConfig()));
         ReimbursementServlet reimbursementServlet=new ReimbursementServlet(mapper,new ReimbursementService(new ReimbursementDAO()),new TokenService(new JwtConfig()));
         /* Need ServletContext class to map whatever servlet to url path. */
+        /*Object mapper uses reflection to parse json to java and java to json*/
         ServletContext context = sce.getServletContext();
         context.addServlet("UserServlet", userServlet).addMapping("/users/*");
         context.addServlet("AuthServlet", authServlet).addMapping("/auth");
@@ -36,6 +37,6 @@ public class ContextLoaderListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("\nShutting down Yolp web application");
+        System.out.println("\nShutting down ERS web application");
     }
 }
