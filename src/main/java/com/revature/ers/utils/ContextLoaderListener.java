@@ -21,6 +21,7 @@ public class ContextLoaderListener implements ServletContextListener {
 
         System.out.println("\nInitializing Employee Reimbursement System web application");
 
+
         /* ObjectMapper provides functionality for reading and writing JSON, either to and from basic POJOs (Plain Old Java Objects) */
         ObjectMapper mapper = new ObjectMapper();
 
