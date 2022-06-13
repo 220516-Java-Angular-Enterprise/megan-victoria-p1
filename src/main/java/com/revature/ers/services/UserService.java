@@ -1,8 +1,7 @@
 package com.revature.ers.services;
 
 import com.revature.ers.daos.UserDAO;
-import com.revature.ers.dtos.requests.LoginRequest;
-import com.revature.ers.dtos.requests.NewUserRequest;
+import com.revature.ers.dtos.requests.*;
 import com.revature.ers.models.User;
 import com.revature.ers.utils.annotations.Inject;
 import com.revature.ers.utils.custom_exceptions.*;
@@ -61,7 +60,7 @@ public class UserService {
         return userDAO.getUsersByRole(role);
     }
 
-
+// VALIDATIONS
     private boolean isValidUsername(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }
@@ -83,13 +82,17 @@ public class UserService {
         return user;
     }
 
-    public boolean updatePassword(String password, String id) {
-        try {
-            UserDAO.updateUserPassword(password, id);
-            return true;
-        } catch (InvalidSQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return false;
+//    ADMIN FUNCTIONS
+    public void updatePassword(ChangePasswordRequest changePasswordRequest) {
+      userDAO.updateUserPassword(changePasswordRequest.getPassword(), changePasswordRequest.getUsername());
+    }
+
+    public void changeUserStatus(IsActiveRequest isActiveRequest) {
+        userDAO.updateIs_active(isActiveRequest.getIs_active(), isActiveRequest.getUsername());
+    }
+
+    public void changeUserRole(ChangeUserRole changeUserRole) {
+        userDAO.updateUserRole(changeUserRole.getRole_id(), changeUserRole.getUsername());
     }
 }
+
