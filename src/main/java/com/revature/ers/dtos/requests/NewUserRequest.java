@@ -5,6 +5,7 @@ public class NewUserRequest {
     private String password;
 
     private final String role_id = "9";
+    private final boolean is_active = false;
 
     public NewUserRequest(){
         super();
@@ -36,7 +37,11 @@ public class NewUserRequest {
     }
     public User extractUser(){
 
-        return new User(username,password,role_id);
+        return new User(username,password,role_id, is_active);
+    }
+
+    public boolean isIs_active() {
+        return is_active;
     }
 
     @Override
@@ -45,6 +50,7 @@ public class NewUserRequest {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role_id='" + role_id + '\'' +
+                ", is_active=" + is_active +
                 '}';
     }
 }

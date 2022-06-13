@@ -8,6 +8,7 @@ import com.revature.ers.services.TokenService;
 import com.revature.ers.services.UserService;
 import com.revature.ers.servlets.AuthServlet;
 import com.revature.ers.servlets.ReimbursementServlet;
+import com.revature.ers.servlets.TestServlet;
 import com.revature.ers.servlets.UserServlet;
 
 import javax.servlet.ServletContext;
@@ -26,6 +27,7 @@ public class ContextLoaderListener implements ServletContextListener {
         ObjectMapper mapper = new ObjectMapper();
 
         /* Dependency injection. */
+        TestServlet testServlet = new TestServlet();
         UserServlet userServlet = new UserServlet(mapper, new UserService(new UserDAO()), new TokenService(new JwtConfig()));
         AuthServlet authServlet = new AuthServlet(mapper, new UserService(new UserDAO()), new TokenService(new JwtConfig()));
         ReimbursementServlet reimbursementServlet=new ReimbursementServlet(mapper,new ReimbursementService(new ReimbursementDAO()),new TokenService(new JwtConfig()));
@@ -33,7 +35,9 @@ public class ContextLoaderListener implements ServletContextListener {
         ServletContext context = sce.getServletContext();
         context.addServlet("UserServlet", userServlet).addMapping("/users/*");
         context.addServlet("AuthServlet", authServlet).addMapping("/auth");
-        context.addServlet("ReimbursementServlet",reimbursementServlet).addMapping("/reimburse");
+        context.addServlet("ReimbursementServlet",reimbursementServlet).addMapping("/reimburse/*");
+        context.addServlet("TestServlet", testServlet).addMapping("/test");
+
     }
 
     @Override

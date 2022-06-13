@@ -25,10 +25,13 @@ public class User {
         this.role_id = role_id;
     }
 
-    public User(String username, String password, String role_id) {
+
+
+    public User(String username, String password, String role_id, boolean is_active) {
         this.username = username;
         this.password = password;
         this.role_id = role_id;
+        this.is_active = is_active;
     }
 
 
