@@ -5,6 +5,7 @@ com\revature\ers\utils\JwtConfig.class
 com\revature\ers\services\ReimbursementService.class
 com\revature\ers\services\TokenService.class
 com\revature\ers\servlets\UserServlet.class
+com\revature\ers\dtos\requests\NewReimbursementRequest.class
 com\revature\ers\services\User_RoleService.class
 com\revature\ers\utils\annotations\Inject.class
 com\revature\ers\models\User.class
