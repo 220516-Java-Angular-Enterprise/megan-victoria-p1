@@ -5,6 +5,7 @@ import com.revature.ers.utils.custom_exceptions.InvalidSQLException;
 import com.revature.ers.utils.database.ConnectionFactory;
 
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -165,7 +166,9 @@ public class UserDAO implements CrudDAO<User> {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                user = new User(rs.getString("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"), rs.getString("given_name"), rs.getString("surname"), rs.getBoolean("is_active"), rs.getString("role_id"));
+                user = new User(rs.getString("id"), rs.getString("username"), rs.getString("email"),
+                        rs.getString("password"), rs.getString("given_name"), rs.getString("surname"),
+                        rs.getBoolean("is_active"), rs.getString("role_id"));
             }
         } catch (SQLException e) {
 //            throw new InvalidSQLException("An error occurred trying to get username and password from the database.");
@@ -186,7 +189,8 @@ public class UserDAO implements CrudDAO<User> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                users.add(new User(rs.getString("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"), rs.getString("given_name"), rs.getString("surname"), rs.getBoolean("is_active"), rs.getString("role_id")));
+                users.add(new User(rs.getString("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"),
+                        rs.getString("given_name"), rs.getString("surname"), rs.getBoolean("is_active"), rs.getString("role_id")));
             }
 
         } catch (SQLException e) {
