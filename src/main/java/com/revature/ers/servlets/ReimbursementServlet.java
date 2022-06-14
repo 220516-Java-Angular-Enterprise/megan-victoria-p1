@@ -44,7 +44,6 @@ public class ReimbursementServlet extends HttpServlet {
             if (uris.length == 4 && uris[3].equals("reimbursement")) {
                 Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
-
                 if (requester == null) {
                     resp.setStatus(401);
                     return;
@@ -86,7 +85,7 @@ public class ReimbursementServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-        List<String> uris = Arrays.asList(req.getRequestURI().split("/"));
+        String[] uris = req.getRequestURI().split("/");
 
         if (requester == null) {
             resp.setStatus(401); //unauthorized
@@ -95,14 +94,14 @@ public class ReimbursementServlet extends HttpServlet {
 
 //        employee update reimb
         if (requester.getRole_id().equals("9")) {
-            if (uris.contains("updateamount")) {
+            if (uris.length == 4 && uris[3].equals("new-amt")) {
                 UpdateReimbAmountRequest changeAmt = mapper.readValue(req.getInputStream(), UpdateReimbAmountRequest.class);
                 reimbursementService.updateAmount(changeAmt);
                 resp.setContentType("application/json");
                 resp.getWriter().write(mapper.writeValueAsString(changeAmt.getAmount()));
             }
 
-            else if (uris.contains("updatedesc")) {
+            else if (uris.length == 4 && uris[3].equals("new-desc")) {
                 UpdateReimbDescRequest changeDec = mapper.readValue(req.getInputStream(), UpdateReimbDescRequest.class);
                 reimbursementService.updateDescription(changeDec);
                 resp.setContentType("application/json");
@@ -110,7 +109,7 @@ public class ReimbursementServlet extends HttpServlet {
             }
         }
 
-        if (requester.getRole_id().equals("10") && uris.contains("changeStatus")) {
+        if (requester.getRole_id().equals("10") && uris.length == 4 && uris[3].equals("status")) {
             ApproveDenyRequest status = mapper.readValue(req.getInputStream(), ApproveDenyRequest.class);
             reimbursementService.updateReimbStatus(status);
             resp.setContentType("application/json");
@@ -122,7 +121,7 @@ public class ReimbursementServlet extends HttpServlet {
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-    List<String> uris = Arrays.asList(req.getRequestURI().split("/"));
+    String[] uris = req.getRequestURI().split("/");
 
     if (requester == null) {
         resp.setStatus(401); // UNAUTHORIZED
@@ -131,57 +130,58 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 
 //    employee gets
     if (requester.getRole_id().equals("9")) {
-        if(uris.contains("viewallbyuser")) {
+        if(uris.length == 4 && uris[3].equals("my-reimb")) {
             List<Reimbursement> reimbs = reimbursementService.getAllByUser(requester.getId());
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
-//        ONLY RETURN ONE BY ID
-//        else if(uris.contains("reimb-id")) {
-//            Reimbursement reimb = reimbursementService.getById();
+//        if(uris.length == 4 && uris[3].equals("pending")) {
+//            List<Reimbursement> reimbs = reimbursementService.getAllByS(requester.getId());
+//            resp.setContentType("application/json");
+//            resp.getWriter().write(mapper.writeValueAsString(reimbs));
 //        }
     }
 
 //    FIN MAN GETS
     if (requester.getRole_id().equals("10")) {
-        if (uris.contains("viewallreimb")) {
+        if (uris.length == 4 && uris[3].equals("all-reimb")) {
             List<Reimbursement> reimbs = reimbursementService.getAll();
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
-        else if (uris.contains("pending")) {
+        else if (uris.length == 4 && uris[3].equals("pending")) {
             List<Reimbursement> reimbs = reimbursementService.getAllByStatus("5");
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
 
-        else if (uris.contains("approved")) {
+        else if (uris.length == 4 && uris[3].equals("approved")) {
             List<Reimbursement> reimbs = reimbursementService.getAllByStatus("6");
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
-        else if (uris.contains("denied")) {
+        else if (uris.length == 4 && uris[3].equals("denied")) {
             List<Reimbursement> reimbs = reimbursementService.getAllByStatus("7");
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
-        else if (uris.contains("lodging")) {
+        else if (uris.length == 4 && uris[3].equals("lodging")) {
             List<Reimbursement> reimbs = reimbursementService.getAllByType("1");
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
 
-        else if (uris.contains("travel")) {
+        else if (uris.length == 4 && uris[3].equals("travel")) {
             List<Reimbursement> reimbs = reimbursementService.getAllByType("2");
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
-        else if (uris.contains("food")) {
+        else if (uris.length == 4 && uris[3].equals("food")) {
             List<Reimbursement> reimbs = reimbursementService.getAllByType("3");
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
-        else if (uris.contains("other")) {
+        else if (uris.length == 4 && uris[3].equals("other")) {
             List<Reimbursement> reimbs = reimbursementService.getAllByType("4");
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbs));
