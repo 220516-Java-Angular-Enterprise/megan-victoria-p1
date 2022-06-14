@@ -44,7 +44,8 @@ private final ObjectMapper mapper;
         }
         catch (InvalidRequestException e)
         {
-            resp.setStatus(404);
+            resp.setStatus(403);
+            e.printStackTrace();
         }
         catch (AuthenticationException e){
             resp.setStatus(401);
