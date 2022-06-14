@@ -32,18 +32,18 @@ public class UserService {
 
     public User register(NewUserRequest request) {
         User user = request.extractUser();
-
-        if (isNotDuplicateUsername(user.getUsername())) {
-            if (isValidUsername(user.getUsername())) {
-                if (isValidPassword(user.getPassword())) {
+        String username = user.getUsername();
+        if(isNotDuplicateUsername(username)){
+            if(isValidUsername(username)){
+                if(isValidPassword(user.getPassword())){
                     user.setId(UUID.randomUUID().toString());
                     userDAO.save(user);
-                } else
-                    throw new InvalidRequestException("Invalid password. Minimum eight characters,at least one letter, one number and one special character. ");
-            } else throw new InvalidRequestException("Invalid username. Username needs to be 8-20 characters long ");
-        } else throw new ResourceConflictException("Username is already taken");
+                }else throw new InvalidRequestException("Invalid password.Minimum eight characters,at least one letter,one number and one special character");
+            }else throw new InvalidRequestException("Invalid username needs to be 8-20 characters long.");
+        }else throw new ResourceConflictException("Username is already taken..");
         return user;
     }
+
 
     public User getUserById(String id) {
         return userDAO.getById(id);
@@ -66,6 +66,7 @@ public class UserService {
     }
 
 // VALIDATIONS
+
     private boolean isValidUsername(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }
@@ -75,7 +76,7 @@ public class UserService {
     }
 
     private boolean isValidPassword(String password) {
-        return password.matches("^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[@$!%*#?&])[A-Za-z\\\\d@$!%*#?&]{8,}$");
+        return password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
     }
 
     private User isValidCredentials(User user) {
