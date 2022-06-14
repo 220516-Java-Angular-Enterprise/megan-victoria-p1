@@ -10,6 +10,13 @@ import java.util.Properties;
 public class ConnectionFactory {
     private static ConnectionFactory connectionFactory;
 
+    public static void main(String[] args){
+        String currentDir = System.getProperty("user.dir");
+        System.out.println("Current dir using System:" + currentDir);
+        System.out.println(currentDir);
+
+    }
+
     static {
         try {
             Class.forName("org.postgresql.Driver");
@@ -22,7 +29,10 @@ public class ConnectionFactory {
 
     private ConnectionFactory() {
         try {
-            props.load(new FileReader("src/main/resources/db.properties"));
+            String currentDir = System.getProperty("user.dir");
+            System.out.println("Current dir using System:" + currentDir);
+            System.out.println(currentDir);
+            props.load(new FileReader("db.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
