@@ -43,6 +43,7 @@ public class UserServlet extends HttpServlet {
 //            get uris so we can map the route and see permissions
             String[] uris = req.getRequestURI().split("/");
 
+//            Returns single user
             if (uris.length == 4 && uris[3].equals("username")) {
                 Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
@@ -67,6 +68,7 @@ public class UserServlet extends HttpServlet {
                 return;
             }
 
+//            creates a new user
             User createdUser = userService.register(request);
             resp.setStatus(201);//Created
             resp.setContentType("application/json");
@@ -84,37 +86,43 @@ public class UserServlet extends HttpServlet {
     @Override
 //    will get info (request sorts/info users would need)
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-
 //        this will allow us to get the actual flow of the user
-        List<String> uris = Arrays.asList(req.getRequestURI().split("/"));
+        String[] uris = req.getRequestURI().split("/");
 
-//        this will allow admin to get by what ever search param
-//        look at 1st letter? search by: User, Role, Status
-        String query = req.getQueryString();
-        resp.setContentType("application/json");
+            Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
-        if (requester == null) {
-            resp.setStatus(401); //unauthorized
-            return;
+            if (requester == null) {
+                resp.setStatus(401); //unauthorized error
+                return;
+            }
+
+            if (!requester.getRole_id().equals("8")) {
+                resp.setStatus(403); //forbidden access
+                return;
+            }
+
+        if (uris.length == 4 && uris[3].equals("is-active")) {
+            List<User> users = userService.getUserStatus(true);
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString(users));
         }
 
-
-//        ADMIN CONTROLS GET ALL USERS
-        if (!requester.getRole_id().equals("8")) {
-            resp.setStatus(403); // FORBIDDEN
-            return;
+        if (uris.length == 4 && uris[3].equals("is-pending")) {
+            List<User> users = userService.getUserStatus(false);
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString(users));
         }
 
-        List<User> users = userService.getAllUsers();
-        resp.setContentType("application/json");
-        resp.getWriter().write(mapper.writeValueAsString(users));
-
+        if (uris.length == 4 && uris[3].equals("all-users")) {
+            List<User> users = userService.getAllUsers();
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString(users));
+        }
     }
 
         protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-            List<String> uris = Arrays.asList(req.getRequestURI().split("/"));
+            String[] uris = req.getRequestURI().split("/");
 
             if (requester == null) {
                 resp.setStatus(401); //unauthorized
@@ -127,7 +135,7 @@ public class UserServlet extends HttpServlet {
             }
 
 //            to update password
-            if(uris.contains("changepassword")) {
+            if(uris.length == 4 && uris[3].equals("change-pswd")) {
                 ChangePasswordRequest changePswd = mapper.readValue(req.getInputStream(), ChangePasswordRequest.class);
                 userService.updatePassword(changePswd);
                 resp.setContentType("application/json");
@@ -135,7 +143,7 @@ public class UserServlet extends HttpServlet {
             }
 
 //            update role
-            else if(uris.contains("changerole")) {
+            else if(uris.length == 4 && uris[3].equals("change-role")) {
                 ChangeUserRole changeRole = mapper.readValue(req.getInputStream(), ChangeUserRole.class);
                 userService.changeUserRole(changeRole);
                 resp.setContentType("application/json");
@@ -143,7 +151,7 @@ public class UserServlet extends HttpServlet {
             }
 
 //            update is active
-            else if(uris.contains("userstatus")) {
+            else if(uris.length == 4 && uris[3].equals("change-status")) {
                 IsActiveRequest isActive = mapper.readValue(req.getInputStream(), IsActiveRequest.class);
                 userService.changeUserStatus(isActive);
                 resp.setContentType("application/json");

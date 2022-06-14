@@ -95,6 +95,24 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
         return reimbs;
     }
 
+//    public List<Reimbursement> getReimbursementByUserId(String author_id) {
+//        List<Reimbursement> reimbursement = new ArrayList<>();
+//        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
+//            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements WHERE author_id=(?) ");
+//            ps.setString(1, author_id);
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                reimbursement.add(new Reimbursement(rs.getString("id"), rs.getBigDecimal("amount"), rs.getTimestamp("submitted"),
+//                        rs.getTimestamp("resolved"), rs.getString("description"), rs.getBlob("receipt"), rs.getString("payment_id"),
+//                        rs.getString("author_id"), rs.getString("resolver_id"), rs.getString("status_id"), rs.getString("type_id")));
+//            }
+//        } catch (SQLException e) {
+//            throw new InvalidSQLException("An error occurred when trying to get the status of the reimbursement");
+//        }
+//        return reimbursement;
+//    }
+
 
 //    FIN MAN GET REIMB BY STATUS
     public List<Reimbursement> getReimbursementByStatusId(String status_id) {

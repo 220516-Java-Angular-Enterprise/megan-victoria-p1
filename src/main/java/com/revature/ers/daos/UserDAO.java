@@ -212,12 +212,12 @@ public class UserDAO implements CrudDAO<User> {
         return users;
     }
 
-    public List<User> getUserActive(String activity) {
+    public List<User> getUserActive(boolean activity) {
         List<User> users = new ArrayList<>();
 
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE ");
-            ps.setString(1, activity + '%');
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE is_active = ?");
+            ps.setBoolean(1, activity);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -230,8 +230,6 @@ public class UserDAO implements CrudDAO<User> {
 
         return users;
     }
-
-//    made me make it static bc of user service. No if we run into probs, check here...
 
 }
 
