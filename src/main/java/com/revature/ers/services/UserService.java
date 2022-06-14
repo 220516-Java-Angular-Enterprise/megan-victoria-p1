@@ -61,7 +61,7 @@ public class UserService {
         return userDAO.getUsersByRole(role);
     }
 
-    public List<User> getUserStatus (String status) {
+    public List<User> getUserStatus (boolean status) {
         return userDAO.getUserActive(status);
     }
 

@@ -89,7 +89,6 @@ public class UserServlet extends HttpServlet {
 //        this will allow us to get the actual flow of the user
         String[] uris = req.getRequestURI().split("/");
 
-        if (uris.length == 4 && uris[3].equals("is-active")) {
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
             if (requester == null) {
@@ -102,11 +101,22 @@ public class UserServlet extends HttpServlet {
                 return;
             }
 
+        if (uris.length == 4 && uris[3].equals("is-active")) {
+            List<User> users = userService.getUserStatus(true);
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString(users));
+        }
 
-//            List<User> users = userService.getUserStatus();
-//            resp.setContentType("application/json");
-//            resp.getWriter().write(mapper.writeValueAsString(users));
+        if (uris.length == 4 && uris[3].equals("is-pending")) {
+            List<User> users = userService.getUserStatus(false);
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString(users));
+        }
 
+        if (uris.length == 4 && uris[3].equals("all-users")) {
+            List<User> users = userService.getAllUsers();
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString(users));
         }
     }
 
