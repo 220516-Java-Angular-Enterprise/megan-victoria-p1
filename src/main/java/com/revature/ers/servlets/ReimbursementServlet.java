@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -131,9 +133,10 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 //    employee gets
     if (requester.getRole_id().equals("9")) {
         if(uris.length == 4 && uris[3].equals("my-reimb")) {
-            List<Reimbursement> reimbs = reimbursementService.getAllByUser(requester.getId());
-            resp.setContentType("application/json");
-            resp.getWriter().write(mapper.writeValueAsString(reimbs));
+                List<Reimbursement> reimbs;
+                reimbs = reimbursementService.getAllByUser(requester.getId());
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(reimbs));
         }
 //        if(uris.length == 4 && uris[3].equals("pending")) {
 //            List<Reimbursement> reimbs = reimbursementService.getAllByS(requester.getId());

@@ -60,7 +60,7 @@ public class UserDAO implements CrudDAO<User> {
 //        encryption for password is set in the ps for password. 'bf' makes max pswd 72 and has an output length of 60)
 //        gen_salt generates a new salt value
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, email, password, given_name, surname, is_active, role_id) VALUES (?, ?, ?, crypt(?, gen_salt('bf)), ?, ?, ?, ?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, email, password, given_name, surname, is_active, role_id) VALUES (?, ?, ?, crypt(?, gen_salt('bf')), ?, ?, ?, ?)");
             ps.setString(1, obj.getId());
             ps.setString(2, obj.getUsername());
             ps.setString(3, obj.getEmail());
@@ -71,7 +71,10 @@ public class UserDAO implements CrudDAO<User> {
             ps.setString(8, obj.getRole_id());
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("An error occurred when tyring to save to the database.");
+//            throw new RuntimeException("An error occurred when tyring to save to the database.");
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
     }
 
@@ -131,6 +134,8 @@ public class UserDAO implements CrudDAO<User> {
                 user.setSurname(rs.getString("surname"));
                 user.setIs_active(rs.getBoolean("is_active"));
                 user.setRole_id(rs.getString("role_id"));
+
+                users.add(user);
             }
         } catch (SQLException e) {
             throw new RuntimeException("An error occurred when tyring to get data from to the database.");

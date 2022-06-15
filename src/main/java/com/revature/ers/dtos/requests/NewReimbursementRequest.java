@@ -2,6 +2,7 @@ package com.revature.ers.dtos.requests;
 
 import com.revature.ers.models.Reimbursement;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class NewReimbursementRequest {
@@ -10,14 +11,14 @@ public class NewReimbursementRequest {
     private String status_id;
     private String type_id;
     private Timestamp submitted;
-    private Number amount;
+    private BigDecimal amount;
     private String description;
 
     public NewReimbursementRequest(){
 
     }
 
-    public NewReimbursementRequest(String id, String author_id, String status_id, String type_id, Timestamp submitted, Number amount, String description) {
+    public NewReimbursementRequest(String id, String author_id, String status_id, String type_id, Timestamp submitted, BigDecimal amount, String description) {
         this.id = id;
         this.author_id = author_id;
         this.status_id = status_id;
@@ -59,13 +60,7 @@ public class NewReimbursementRequest {
         this.submitted = submitted;
     }
 
-    public Number getAmount() {
-        return amount;
-    }
 
-    public void setAmount(Number amount) {
-        this.amount = amount;
-    }
 
     public String getDescription() {
         return description;
@@ -84,7 +79,7 @@ public class NewReimbursementRequest {
     }
 
     public Reimbursement extractReimbursement() {
-        return new Reimbursement(id, author_id, status_id, type_id, submitted, amount, description);
+        return new Reimbursement(id, author_id, status_id, type_id, submitted, (BigDecimal) amount, description);
     }
 
     @Override
@@ -98,5 +93,13 @@ public class NewReimbursementRequest {
                 ", amount=" + amount +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }
