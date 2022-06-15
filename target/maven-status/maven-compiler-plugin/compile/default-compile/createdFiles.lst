@@ -22,10 +22,7 @@ com\revature\ers\models\Reimbursement.class
 com\revature\ers\services\UserService.class
 com\revature\ers\models\Reimbursement_Status.class
 com\revature\ers\utils\custom_exceptions\InvalidUserException.class
-<<<<<<< HEAD
-=======
 com\revature\ers\servlets\TestServlet.class
->>>>>>> f66062f00a865967812b6705547855f40b7c1d6f
 com\revature\ers\services\Reimbursement_TypeService.class
 com\revature\ers\daos\CrudDAO.class
 com\revature\ers\dtos\requests\ChangeUserRole.class

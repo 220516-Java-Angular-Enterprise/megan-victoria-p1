@@ -78,9 +78,7 @@ public class UserService {
     }
 
     private boolean isValidPassword(String password) {
-
         return password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$");
-
     }
 
     private User isValidCredentials(User user) {

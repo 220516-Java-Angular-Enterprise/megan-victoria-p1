@@ -1,11 +1,12 @@
 package com.revature.ers.models;
 
+import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Timestamp;
 
 public class Reimbursement {
     private String id;
-    private Number amount;
+    private BigDecimal amount;
     private Timestamp submitted;
     private Timestamp resolved;
     private String description;
@@ -19,7 +20,7 @@ public class Reimbursement {
     public Reimbursement(){
     }
 
-    public Reimbursement(String id, Number amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type_id) {
+    public Reimbursement(String id, BigDecimal amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type_id) {
         this.id = id;
         this.amount = amount;
         this.submitted = submitted;
@@ -33,7 +34,7 @@ public class Reimbursement {
         this.type_id = type_id;
     }
 
-    public Reimbursement(String id, String author_id, String status_id, String type_id, Timestamp submitted, Number amount, String description) {
+    public Reimbursement(String id, String author_id, String status_id, String type_id, Timestamp submitted, BigDecimal amount, String description) {
         this.id = id;
         this.amount = amount;
         this.submitted = submitted;
@@ -51,13 +52,7 @@ public class Reimbursement {
         this.id = id;
     }
 
-    public Number getAmount() {
-        return amount;
-    }
 
-    public void setAmount(Number amount) {
-        this.amount = amount;
-    }
 
     public Timestamp getSubmitted() {
         return submitted;
@@ -149,5 +144,13 @@ public class Reimbursement {
     }
 
     public void update(Reimbursement reimbursement) {
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }
